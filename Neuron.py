@@ -32,7 +32,7 @@ def magnitude(pos):
 #function that is called when theres an error and prints to the user what the error was and the line it occured
 def throwError(errorCode, line):
     global totalErrors
-    errorDictonary = {1:"Trying to make more synapses than neurons avaiable for synapse creation.", 2:"There was an attempted operation on a type that shouldnt be used in that operation.", 3:"Output would produce a negative value region"}
+    errorDictonary = {1:"Trying to make more synapses than neurons avaiable for synapse creation.", 2:"There was an attempted operation on a type that shouldnt be used in that operation.", 3:"Output would produce a negative value region", 4:"Required Conditions for the function call has not been met."}
     print(f"There was an Error on Line {line}\nError: {errorDictonary[errorCode]}")
     totalErrors += 1
 
@@ -48,13 +48,22 @@ def insertSorted(lst, value):
     while bottomBound < topBound:
         index = (topBound + bottomBound) // 2
 
-        if lst[index] == value:
-            lst.insert(index, value)
-            return
-        elif lst[index] < value:
-            bottomBound = index + 1
+        if type(value).__name__ == 'tuple':
+            if lst[index][0] == value[0]:
+                lst.insert(index, value)
+                return
+            elif lst[index][0] < value[0]:
+                bottomBound = index + 1
+            else:
+                topBound = index
         else:
-            topBound = index
+            if lst[index] == value:
+                lst.insert(index, value)
+                return
+            elif lst[index] < value:
+                bottomBound = index + 1
+            else:
+                topBound = index
 
     lst.insert(bottomBound, value)
 
@@ -170,39 +179,50 @@ class Brain:
             for x in range(self.inputDimension[0]):
                 pos = (x, y, 1)
                 self.inputNeurons[pos] = InputNeuron(pos)
+        
+        self.allNeurons.update(self.inputNeurons)
 
     def generateOutputNeurons(self):
         pos = None
 
         for y in range(self.outputDimension[1]):
             for x in range(self.outputDimension[0]):
-                pos = (x, y, 1)
+                pos = (x, y, 10)
                 self.outputNeurons[pos] = OutputNeuron(pos)
-    def generateFixedNeurons(self):
-        self.generateInputNeurons()
-        self.generateOutputNeurons()
+        self.allNeurons.update(self.outputNeurons)
+
+    #function that checks wether all the conditions for generating synapses are correct
+    def checkSynapseGenConditions(self):
+        neuronCheck = self.getNoOutputStatus()
+
+        if all(neuronCheck):
+            return True
+        else:
+            return False
 
     def generateSynapses(self, preNeuron, numSynapses):
-        posX = preNeuron.position[0]
-        deltaPosX = 0
-        posY = preNeuron.position[1]
-        deltaPosY = 0
-        posZ = preNeuron.position[2] + 1
+        if self.checkSynapseGenConditions():
+            #list that holds all the synapse connections for the preNeuron
+            synapses = []
 
-        synapses = []
+            #variable that holds a list containing all the neurons and their distance from the current neuron
+            neuronDistancesAhead = self.findNeuronDistancesFrom(preNeuron.position)[1]
 
-        #variable that holds a list containing all the neurons and their distance from the current neuron
-        neuronDistancesAhead = self.findNeuronDistancesFrom(preNeuron.position)[1]
-        if len(neuronDistancesAhead) >= numSynapses:
-            for i in range(numSynapses):
-                synapseObject = Synapse(preNeuron, neuronDistancesAhead[i])
-                synapses.append(synapseObject)
-                neuronDistancesAhead[i].presynapticConnections.append(synapseObject)
+            if len(neuronDistancesAhead) >= numSynapses:
+                for i in range(numSynapses):
+                    synapseObject = Synapse(preNeuron, neuronDistancesAhead[i])
+                    synapses.append(synapseObject)
+                    neuronDistancesAhead[i][1].presynapticConnections.append(synapseObject)
+            else:
+                for i in range(len(neuronDistancesAhead)):
+                    synapseObject = Synapse(preNeuron, neuronDistancesAhead[i])
+                    synapses.append(synapseObject)
+                    neuronDistancesAhead[i][1].presynapticConnections.append(synapseObject)
+            
+            preNeuron.postsynapticConnections = synapses
+            self.synapses[preNeuron] = synapses
         else:
-            throwError(1, 132)
-            return
-        
-        self.synapses[preNeuron] = synapses
+            throwError(4, 201)
 
     def findNeuronDistancesFrom(self, currentPos):
         neuronsBehind = []
@@ -214,9 +234,9 @@ class Brain:
         deltaZPos = 0
 
         for pos in self.allNeurons:
-            deltaXPos = currentPos[0] - pos[0]
-            deltaYPos = currentPos[1] - pos[1]
-            deltaZPos = currentPos[2] - pos[2]
+            deltaXPos = self.allNeurons[pos].position[0] - currentPos[0]
+            deltaYPos = self.allNeurons[pos].position[1] - currentPos[1]
+            deltaZPos = self.allNeurons[pos].position[2] - currentPos[2]
 
             magnitudeDistance = magnitude((deltaXPos, deltaYPos, deltaZPos))
 
@@ -251,6 +271,23 @@ class Brain:
         print(f"Total Errors Thrown: {totalErrors}")
         print("==============================") #spacer
 
+    def getNoOutputStatus(self):
+        containsNeurons = True if len(self.neurons) > 0 else False
+        containsInputNeurons = True if len(self.inputNeurons) > 0 else False
+        containsOutputNeurons = True if len(self.outputNeurons) > 0 else False
+
+        return (containsInputNeurons, containsOutputNeurons, containsNeurons)
+    
+    #function to generate all the synapses for all the neurons
+    def buildAllConnections(self, numSynapses):
+        #if statement to check that the conditions for generating synapses has been met
+        if self.checkSynapseGenConditions():
+            for key in self.inputNeurons:
+                self.generateSynapses(self.inputNeurons[key], numSynapses[0])
+            for key in self.neurons:
+                self.generateSynapses(self.neurons[key], numSynapses[1])
+        else:
+            throwError(4, 192)
 
 class Synapse:
     def __init__(self, preNeuron, postNeuron):
@@ -294,7 +331,9 @@ outputSize = (4,1)
 
 neuralBrain = Brain(brainSize, inputSize, outputSize)
 
-neuralBrain.generateNeurons(900)
+neuralBrain.generateNeurons(100)
+
+neuralBrain.buildAllConnections((10,10))
 
 neuralBrain.getStatus()
 
