@@ -1,0 +1,57 @@
+Coding Conventions:
+
+Considerations:
+1. () <- not included in names used to describe a part that is replaced with something else
+
+Variable Conventions:
+
+Variable Parts:
+Variables have two parts the "prefix" and the "variable name"
+
+Naming Conventions:
+All variables will be named with a max of three full words describing what it does or is. This does not include the type/scope/frequency prefix the variable has. Every consecutive word after the prefix will have the first letter uppercased.
+Examples:
+Valid: "(prefix)NumberOfDogs", "(prefix)Cats"
+Invalid: "(prefix)VeryLongAndComplicatedVariableName"
+
+Prefix Parts:
+Scope:
+The scope of the variable is located at the very front of the variable and is represented with a single letter. See Below for scope options.
+Scope Options:
+1. "g" for a Global scope
+2. "l" for a Local scope
+3. "e" for an enclosed scope
+4. Theres a fourth one but I dont really use it. I think.
+Examples:
+Valid: "g(RestOfPrefix)(VariableName)", "l(RestOfPrefix)(VariableName)", "e(RestOfPrefix)(Variable)"
+Invalid: "(RestOfPrefix)(VariableName)g", "(RestOfPrefix)(VariableName)Local"
+
+Constants: 
+Constant Variables will have the key word "Const" located after the scope of the variable.
+Examples:
+Valid: "(scope)Const(RestOfPrefix)(VariableName)"
+Invalid: "(scope)Con(RestOfPrefix)(VariableName)", "(scope)Constant(RestOfPrefix)(VariableName)", "(scope)(RestOfPrefix)(VariableName)Const"
+
+Type(s):
+This one is complicated because one variable may be used to hold multiple different types. There will be a maximum of three types that are listed in the name. If it holds more than it will be represented by a catagory type. If there is more than one catagory it holds then it will be represented using the "Any" keyword. In general the types a variable will hold will be in this format "_(type1)_(type2)_(type3)_". For dictonaries the key type will be part of the types.
+Variable Options:
+Catagories:
+1. "Any" used to represent a variable that holds multiple Catagories or any type.
+2. "Num" used to represent a variable that holds types like int, float, double, ect.
+3. "Multi" used for variables that hold multiple values like lists, dictonaries, tuples, ect.
+Single Type:
+1. "Char" used to represent a character
+2. "Obj" used to represent variables that hold an object
+3. Look up the other python types. Your funny if you think im listing them all.
+
+Examples:
+Valid: "(firstPartOfPrefix)_int_(VariableName)", "(firstPartOfPrefix)_Multi_Obj_(VariableName)", "(firstPartOfPrefix)_Multi_Num_Obj_(VariableName)"
+Invalid: "(firstPartOfPrefix)__int__(VariableName)", "(firstPartOfPrefix)Multi_Obj(VariableName)", "(firstPartOfPrefix)(VariableName)_Multi_Num_Obj_"
+
+Conclusion:
+These variable conventions are useful because there formated nicely but also what they represent sounds nicely phrased.
+Example:
+"gConst_int_NumErrors" would convert too -> Global Constant Integer With the name NumErrors
+
+In this example "Num" was used instead of "Number" not because of length but because of the sounding of it. Fluent names priortize over the Variable Names Description.
+
