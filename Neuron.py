@@ -76,7 +76,7 @@ def calcTotalSpace(dimensionsTuple):
         if type(dimensionsTuple[i]).__name__ == 'int':
             region *= dimensionsTuple[i]
         else:
-            throwError(2, 61)
+            throwError(2, 76)
     
     return region
 
