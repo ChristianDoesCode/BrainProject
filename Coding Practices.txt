@@ -1,7 +1,12 @@
 Coding Conventions:
 
 Considerations:
-1. () <- not included in names used to describe a part that is replaced with something else
+1. () <- Not included in names. Used to describe a part that is replaced with something else. It is required.
+2. ... <- Not included in names. Represents a continuation of a sequence or something that should be obvious to fill in.
+3. "" <- represents a type, format, object, ect. located within a sentance. Used to show the bounds of the beginning and End of the type, format, object, ect. 
+4. {} <- Not included in names. Used to describe a part that is only needed if the conditions for it are met or is needed. Optional unless conditions are met or if needed. "{}" overides "()".
+5. All initializations can have exceptions. And its semi common.
+6. 
 
 Variable Conventions:
 
@@ -9,14 +14,14 @@ Variable Parts:
 Variables have two parts the "prefix" and the "variable name"
 
 Naming Conventions:
-All variables will be named with a max of three full words describing what it does or is. This does not include the type/scope/frequency prefix the variable has. Every consecutive word after the prefix will have the first letter uppercased.
+All variables will be named with a max of three full words describing what it does or is. This does not include the type/scope/frequency prefix the variable has. Every consecutive word after the prefix will have the first letter uppercased. The format is "(prefix)(VariableName)".
 Examples:
 Valid: "(prefix)NumberOfDogs", "(prefix)Cats"
 Invalid: "(prefix)VeryLongAndComplicatedVariableName"
 
 Prefix Parts:
 Scope:
-The scope of the variable is located at the very front of the variable and is represented with a single letter. See Below for scope options.
+The scope of the variable is located at the very front of the variable and is represented with a single letter. See Below for scope options. The format is "(scope)(RestOfPrefix)(VariableName)".
 Scope Options:
 1. "g" for a Global scope
 2. "l" for a Local scope
@@ -27,26 +32,40 @@ Valid: "g(RestOfPrefix)(VariableName)", "l(RestOfPrefix)(VariableName)", "e(Rest
 Invalid: "(RestOfPrefix)(VariableName)g", "(RestOfPrefix)(VariableName)Local"
 
 Constants: 
-Constant Variables will have the key word "Const" located after the scope of the variable.
+Constant Variables will have the key word "Const" located after the scope of the variable. The format is "(scope){(Const)}(RestOfPrefix)(VariableName)".
 Examples:
 Valid: "(scope)Const(RestOfPrefix)(VariableName)"
 Invalid: "(scope)Con(RestOfPrefix)(VariableName)", "(scope)Constant(RestOfPrefix)(VariableName)", "(scope)(RestOfPrefix)(VariableName)Const"
 
 Type(s):
-This one is complicated because one variable may be used to hold multiple different types. There will be a maximum of three types that are listed in the name. If it holds more than it will be represented by a catagory type. If there is more than one catagory it holds then it will be represented using the "Any" keyword. In general the types a variable will hold will be in this format "_(type1)_(type2)_(type3)_". For dictonaries the key type will be part of the types.
+This one is complicated because one variable may be used to hold multiple different types. There will ALWAYS be a MAXIMUM of three "(Singletypes)" that are listed in each part of the prefix if needed. If it holds more than it will be represented by a catagory type. If there is more than one catagory it holds then it will be represented using the "Any" keyword. In general the types a variable will hold will be in this format "_(Singletype1)_{(Singletype2)_(Singletype3)}_". The complete format for the variable will be "(scope){(Const)}({(MultiFormat)}{(SingleTypes)})(VariableName)" The reason "{(MultiFormat)}" AND "{(SingleTypes)}" are both conditional and optional is because if one occurs than the other doesent so they are dependent on each other.
 Variable Options:
 Catagories:
-1. "Any" used to represent a variable that holds multiple Catagories or any type.
-2. "Num" used to represent a variable that holds types like int, float, double, ect.
-3. "Multi" used for variables that hold multiple values like lists, dictonaries, tuples, ect.
+1. "Any" used to represent a variable that holds multiple Catagories or any type. Initialized with "None"
+2. "Num" used to represent a variable that holds types like int, float, double, ect. 
+3. "Multi" used for variables that hold multiple values like lists, dictonaries, tuples, ect. See the special format down below.
 Single Type:
-1. "Char" used to represent a character
-2. "Obj" used to represent variables that hold an object
-3. Look up the other python types. Your funny if you think im listing them all.
+1. "Char" used to represent a character. Initialized with "''"
+2. "Obj" used to represent variables that hold an object. Initialized with "None"
+3. "Str" used to represent variables that hold a string. Initialized with """"
+4. "Int" used to represent variables that hold a integer. Initialized with "0" or "1"
+5. "Float" used to represent variables that hold a decimal number. Initialized with "0.0"
+6. "Bool" used to represent variables that hold a boolean. Initialized with "False"
+7. Look up the other python types. Your funny if you think im listing them all.
 
 Examples:
-Valid: "(firstPartOfPrefix)_int_(VariableName)", "(firstPartOfPrefix)_Multi_Obj_(VariableName)", "(firstPartOfPrefix)_Multi_Num_Obj_(VariableName)"
-Invalid: "(firstPartOfPrefix)__int__(VariableName)", "(firstPartOfPrefix)Multi_Obj(VariableName)", "(firstPartOfPrefix)(VariableName)_Multi_Num_Obj_"
+Valid: "(scope){(Const)}_int_(VariableName)", "(scope){(Const)}_Any_Str_(VariableName)", "(scope){(Const)}_Char_Num_Obj_(VariableName)"
+Invalid: "(scope){(Const)}__int__(VariableName)", "(scope){(Const)}Multi_Obj(VariableName)", "(scope){(Const)}(VariableName)_Multi_Num_Obj_", "(scope){(Const)}_Char_Num_Obj_Int_(VariableName)"
+
+Multi Format:
+The format for variables of the "Multi" type are very importaint because there can be "Multi" types within "Multi" types. All types within the "Multi" type will be enclosed with the key words "InnerBeg" and "InnerEnd". This can be used to keep nesting down "Multi" types although rare. The variables with the "Multi" type will be in this format "_Multi_(MultiType)_{(KeyType)}_InnerBeg_{(SingleTypes)}_{(OtherMultiFormats)}_InnerEnd_".
+Multi Types:
+1. "Dict" used to represent a variable with the dictionary type as one, some, or all of its "Multi" types. Initialized with "{}"
+    Format: "_Multi_Dict_(KeyType)_InnerBeg_{(Singletypes)}_{(OtherMultiFormats)}_InnerEnd_"
+2. "List" used to represent a variable with the List type as one, some, or all of its "Multi" types. Initialized with "[]"
+    Format: "_Multi_List_InnerBeg_{(Singletypes)}_{(OtherMultiFormats)}_InnerEnd_"
+3. "Tuple" used to represent a variable with the Tuple type as one, some, or all of its "Multi" types. Initialized with "()"
+    Format: "_Multi_Tuple_InnerBeg_{(Singletypes)}_{(OtherMultiFormats)}_InnerEnd_"
 
 Conclusion:
 These variable conventions are useful because there formated nicely but also what they represent sounds nicely phrased.
