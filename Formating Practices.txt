@@ -6,7 +6,45 @@ Considerations:
 3. "" <- represents a type, format, object, ect. located within a sentance. Used to show the bounds of the beginning and End of the type, format, object, ect. 
 4. {} <- Not included in names. Used to describe a part that is only needed if the conditions for it are met or is needed. Optional unless conditions are met or if needed. "{}" overides "()".
 5. All initializations can have exceptions. And its semi common.
-6. 
+6. One indent Format
+
+======================================
+
+Class Conventions:
+
+Introduction:
+Ok so the class names are relatively simple because they do not contain a prefix. This is due to the fact classes dont have a scope, multiple types, and are usually always changed.
+ALL classes will and must have an initializer see Function/Methods for its conventions.
+
+Naming Conventions:
+All classes will be named with a max of three full words of what it represents or is. Every word will have the first letter uppercased. The format is "(ClassName):". Class names typically should represent a real world object/thing/principle. Class names should typically only have the actual name of the object/thing/principle with the exception of descriptive words like "Big", "Tiny", "Molten".
+Examples:
+Valid: "Dog", "LargeComputerCase"
+Invalid: "dog", "Large_Computer_Case", "largeDog"
+Optionaly Invalid: "ADog", "TheLargeCase"
+
+Conclusion:
+When it comes to the name of classes it really depends what its being used for. There will probably be exceptions.
+
+======================================
+
+Functions/Methods Conventions:
+
+Introduction:
+Oh boy, so this is where it starts getting complex. Functions/Methods have a scope, name, and suffix.
+
+Naming Conventions:
+All functions will be named with a max of five full words describing a operation, process, action, function, ect. This does not include the return types, scope, and suffix the function has.
+
+Function/Method Parts:
+Scope:
+The scope of the variable is located at the very front of the variable and is represented with a single letter. See Below for scope options. The format is "(scope)(Function)(Suffix)".
+Scope Options:
+1. "g" for a Global scope
+2. "l" for a Local scope
+3. "e" for an enclosed scope
+
+======================================
 
 Variable Conventions:
 
@@ -14,7 +52,7 @@ Variable Parts:
 Variables have two parts the "prefix" and the "variable name"
 
 Naming Conventions:
-All variables will be named with a max of three full words describing what it does or is. This does not include the type/scope/frequency prefix the variable has. Every consecutive word after the prefix will have the first letter uppercased. The format is "(prefix)(VariableName)".
+All variables will be named with a max of three full words describing what it does or is. This does not include the types and scope prefix parts the variable has. Every consecutive word after the prefix will have the first letter uppercased. The format is "(prefix)(VariableName)".
 Examples:
 Valid: "(prefix)NumberOfDogs", "(prefix)Cats"
 Invalid: "(prefix)VeryLongAndComplicatedVariableName"
@@ -73,4 +111,6 @@ Example:
 "gConst_int_NumErrors" would convert too -> Global Constant Integer With the name NumErrors
 
 In this example "Num" was used instead of "Number" not because of length but because of the sounding of it. Fluent names priortize over the Variable Names Description.
+
+======================================
 
